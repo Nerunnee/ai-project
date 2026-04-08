@@ -5,25 +5,33 @@ import { Input } from "@/components/ui/input";
 import { analysisGen } from "@/lib/service/analysis-gen";
 import { RotateCw, Sparkles, FileText, LoaderCircle } from "lucide-react";
 import { ChangeEventHandler, useState } from "react";
+import ReactMarkdown from "react-markdown";
 
 export function ImageAnalysis() {
   const [image, setImage] = useState("");
+  const [mimeType, setMimeType] = useState("image/jpeg");
   const [analysis, setAnalysis] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const imageUrl: ChangeEventHandler<HTMLInputElement, HTMLInputElement> = (
-    event,
-  ) => {
-    setImage(event.target.value);
+  const handleFileChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setMimeType(file.type);
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = (reader.result as string).split(",")[1];
+      setImage(base64);
+    };
+    reader.readAsDataURL(file);
   };
 
   const onHandleImage = async () => {
+    if (!image) return;
     setLoading(true);
-    const createdAnalysis = await analysisGen(image);
-
-    if (createdAnalysis) {
-      setAnalysis(createdAnalysis);
-    }
+    const createdAnalysis = await analysisGen(image, mimeType); // pass both
+    if (createdAnalysis) setAnalysis(createdAnalysis);
     setLoading(false);
   };
 
@@ -48,14 +56,16 @@ export function ImageAnalysis() {
         <p>Upload a food photo, and AI will detect the ingredients.</p>
 
         <Input
-          value={image}
           type="file"
-          onChange={imageUrl}
+          accept="image/*"
+          onChange={handleFileChange}
           className="w-100"
         />
 
         <div className="flex justify-end">
-          <Button onClick={onHandleImage}>Generate</Button>
+          <Button onClick={onHandleImage} disabled={!image || loading}>
+            Generate
+          </Button>
         </div>
       </div>
 
@@ -68,18 +78,18 @@ export function ImageAnalysis() {
           <p>First, enter your image to recognize an ingredients.</p>
         )}
 
-        {loading && <p>Working...</p>}
+        {loading && <p>Working on your image just wait for moment.</p>}
 
         {loading && (
           <div className="flex flex-col items-center justify-center gap-3 rounded-3xl border border-dashed h-64 text-muted-foreground animate-pulse">
             <LoaderCircle className="animate-spin w-8 h-8" />
-            <p className="text-sm">Generating your image...</p>
+            <p className="text-sm">Analyzing your image...</p>
           </div>
         )}
 
         {analysis && !loading && (
           <div className="flex flex-col items-center justify-center gap-3 rounded-3xl border h-64 max-h-100 overflow-scroll max-w-fit p-2">
-            <p>{analysis}</p>
+            <ReactMarkdown>{analysis}</ReactMarkdown>
           </div>
         )}
       </div>

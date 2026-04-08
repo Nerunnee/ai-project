@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { ingredientGen } from "@/lib/service/ingredient-gen";
 import { RotateCw, Sparkles, FileText, LoaderCircle } from "lucide-react";
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
 
 export function ImageIngredient() {
   const [prompt, setPrompt] = useState("");
@@ -52,7 +53,9 @@ export function ImageIngredient() {
         />
 
         <div className="flex justify-end">
-          <Button onClick={onHandleIngredient}>Generate</Button>
+          <Button onClick={onHandleIngredient} disabled={!prompt || loading}>
+            Generate
+          </Button>
         </div>
       </div>
 
@@ -75,8 +78,8 @@ export function ImageIngredient() {
         )}
 
         {ingredient && !loading && (
-          <div className="flex flex-col items-center justify-center gap-3 rounded-3xl border h-64 max-h-100 overflow-scroll max-w-fit p-2">
-            <p>{ingredient}</p>
+          <div className="flex flex-col items-center justify-center gap-3 rounded-3xl border h-64 max-h-100 max-w-fit overflow-scroll p-2">
+            <ReactMarkdown>{ingredient}</ReactMarkdown>
           </div>
         )}
       </div>

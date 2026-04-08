@@ -52,7 +52,9 @@ export function ImageCreater() {
         />
 
         <div className="flex justify-end">
-          <Button onClick={onHandleImage}>Generate</Button>
+          <Button onClick={onHandleImage} disabled={!prompt || loading}>
+            Generate
+          </Button>
         </div>
       </div>
 
