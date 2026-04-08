@@ -6,7 +6,7 @@ import { ImageIngredient } from "./components/imageIngredient";
 export default function Home() {
   return (
     <Tabs defaultValue="overview" className="w-100">
-      <TabsList className="my-6">
+      <TabsList className="my-6 text-sm">
         <TabsTrigger value="text">Image analysis</TabsTrigger>
         <TabsTrigger value="ingredient">Ingredient recognition</TabsTrigger>
         <TabsTrigger value="image">Image creator</TabsTrigger>
