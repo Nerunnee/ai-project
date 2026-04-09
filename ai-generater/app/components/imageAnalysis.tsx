@@ -78,7 +78,7 @@ export function ImageAnalysis() {
           <p>First, enter your image to recognize an ingredients.</p>
         )}
 
-        {loading && <p>Working on your image just wait for moment.</p>}
+        {loading && <p>Working on your result just wait for moment.</p>}
 
         {loading && (
           <div className="flex flex-col items-center justify-center gap-3 rounded-3xl border border-dashed h-64 text-muted-foreground animate-pulse">
