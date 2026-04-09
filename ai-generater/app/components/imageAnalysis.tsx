@@ -30,7 +30,7 @@ export function ImageAnalysis() {
   const onHandleImage = async () => {
     if (!image) return;
     setLoading(true);
-    const createdAnalysis = await analysisGen(image, mimeType); // pass both
+    const createdAnalysis = await analysisGen(image, mimeType);
     if (createdAnalysis) setAnalysis(createdAnalysis);
     setLoading(false);
   };
