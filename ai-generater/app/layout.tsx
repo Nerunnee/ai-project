@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Figtree } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Header } from "./components/header";
+import { Chat } from "./components/chat";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -38,9 +39,12 @@ export default function RootLayout({
         figtree.variable,
       )}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col relative">
         <Header />
         <div className="flex flex-col items-center">{children}</div>
+        <div className="absolute bottom-10 right-10">
+          <Chat />
+        </div>
       </body>
     </html>
   );
