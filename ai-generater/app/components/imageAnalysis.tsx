@@ -3,12 +3,20 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { analysisGen } from "@/lib/service/analysis-gen";
-import { RotateCw, Sparkles, FileText, LoaderCircle } from "lucide-react";
+import {
+  RotateCw,
+  Sparkles,
+  FileText,
+  LoaderCircle,
+  Upload,
+  ImageIcon,
+} from "lucide-react";
 import { ChangeEventHandler, useState } from "react";
 import ReactMarkdown from "react-markdown";
 
 export function ImageAnalysis() {
   const [image, setImage] = useState("");
+  const [preview, setPreview] = useState("");
   const [mimeType, setMimeType] = useState("image/jpeg");
   const [analysis, setAnalysis] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,8 +29,9 @@ export function ImageAnalysis() {
 
     const reader = new FileReader();
     reader.onload = () => {
-      const base64 = (reader.result as string).split(",")[1];
-      setImage(base64);
+      const dataUrl = reader.result as string;
+      setPreview(dataUrl);
+      setImage(dataUrl.split(",")[1]);
     };
     reader.readAsDataURL(file);
   };
@@ -37,6 +46,7 @@ export function ImageAnalysis() {
 
   const onRefresh = () => {
     setImage("");
+    setPreview("");
     setAnalysis("");
     setLoading(false);
   };
@@ -61,6 +71,15 @@ export function ImageAnalysis() {
           onChange={handleFileChange}
           className="w-100"
         />
+        {preview && (
+          <div className="rounded-xl overflow-hidden border w-full max-h-64">
+            <img
+              src={preview}
+              alt="Preview"
+              className="w-full h-full object-contain"
+            />
+          </div>
+        )}
 
         <div className="flex justify-end">
           <Button onClick={onHandleImage} disabled={!image || loading}>
